@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "skewt-scipy"
+version = "0.0.1"
+authors = [
+    { name="Jie Li", email="jl725@kent.ac.uk" },
+]
+maintainers = [{ name="Jie Li", email="jl725@kent.ac.uk" },]
+
+description = "The skew student t distribution"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    'matplotlib',
+    'numpy',
+    'scipy',
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[tool.setuptools]
+# ...
+# By default, include-package-data is true in pyproject.toml, so you do
+# NOT have to specify this line.
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.urls]
+"Homepage" = "https://github.com/Jieli12/skewt-scipy"
+"Documentation" = "https://skewt-scipy.readthedocs.io/en/latest/"
+"Bug Tracker" = "https://github.com/Jieli12/skewt-scipy/issues"
