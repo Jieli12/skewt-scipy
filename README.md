@@ -5,9 +5,9 @@
 ## Skew student $t$ distribution
 
 We employ the definition of the skew-t distribution from Azzalini (2014, Section 4.3.1). Firstly, we need two density functions: $t$ distribution and skew-normal distribution respectively. The $t$ distribution is defined as:
-\[
+\begin{equation}
     f_{t}(x|\nu) = \frac{\Gamma(\frac{\nu+1}{2})}{\sqrt{\nu\pi}\Gamma(\frac{\nu}{2})}\left(1+\frac{x^{2}}{\nu}\right)^{-\frac{\nu+1}{2}}, \quad x\in \mathbb{R},\quad \nu>0,
-\]
+\end{equation}
 where $\nu$ denotes the degree of freedom. The skew-normal distribution is defined as:
 \[
     f_{sn}(x|\xi,\omega,\alpha) = \frac{2}{\omega}\phi\left(\frac{x-\xi}{\omega}\right)\Phi\left(\alpha \left( \frac{x-\xi}{\omega} \right)\right), \quad x\in \mathbb{R},\quad \omega>0,\quad \alpha\in \mathbb{R},
