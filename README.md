@@ -56,7 +56,7 @@ As the class `skewt` inherits from the class `rv_continuous` of `Scipy`, many me
 | `stats(a, df, loc=0, scale=1, moments='mvsk')`          | Mean('m'), variance('v'), skew('s'), and/or kurtosis('k'). |
 | `fit(data)`                                             | Parameter estimates for generic data.                      |
 
-Note that the parameters $\alpha =\pm \infty $ and $\nu=+\infty$ are valid for the above methods.
+Note that the parameters $\alpha =\pm\infty$ and $\nu=+\infty$ are valid for the above methods.
 
 ## Examples
 
