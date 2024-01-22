@@ -1,7 +1,7 @@
 """
 Author         : Jie Li, Innovision IP Ltd and School of Mathematics, Statistics and Actuarial Science, University of Kent.
 Date           : 2023-12-24 20:58:11
-Last Revision  : 2024-01-22 13:30:03
+Last Revision  : 2024-01-22 13:36:37
 Last Author    : Jie Li
 File Path      : /skewt_scipy/src/skewt_scipy/skewt.py
 Description    :
@@ -520,60 +520,60 @@ class skewt_gen(rv_continuous):
         # case6 = np.vectorize(case6, otypes=["float64"], excluded=["a", "df"])
 
         def case7_ppf(q, a, df, xtol=1e-8):
-            # if df == 1:
-            #     delta = a / np.sqrt(1 + a**2)
-            #     u = (q - 0.5) * np.pi
-            #     return np.tan(u) + delta / np.cos(u)
-            # else:
-            #     if a < 0:
-            #         q = 1 - q
-            #     # from now on have a>0
-            #     lower = t.ppf(q, df)  # quantiles for a=0
-            #     upper = np.sqrt(f.ppf(q, 1, df))
-            #     if a > 0:
-            #         return optimize.brentq(
-            #             lambda x: self._cdf(x, a, df) - q, lower, upper, xtol=xtol
-            #         )
-            #     else:
-            #         return optimize.brentq(
-            #             lambda x: self._cdf(-x, np.abs(a), df) - q,
-            #             -upper,
-            #             -lower,
-            #             xtol=xtol,
-            #         )
-            def vectorized_brentq(func, qq, lower, upper, xtol=1e-8):
-                return np.array(
-                    [
-                        optimize.brentq(lambda x: func(x) - q, l, u, xtol=xtol)
-                        for q, l, u in zip(qq, lower, upper)
-                    ]
-                )
+            if df == 1:
+                delta = a / np.sqrt(1 + a**2)
+                u = (q - 0.5) * np.pi
+                return np.tan(u) + delta / np.cos(u)
+            else:
+                if a < 0:
+                    q = 1 - q
+                # from now on have a>0
+                lower = t.ppf(q, df)  # quantiles for a=0
+                upper = np.sqrt(f.ppf(q, 1, df))
+                if a > 0:
+                    return optimize.brentq(
+                        lambda x: self._cdf(x, a, df) - q, lower, upper, xtol=xtol
+                    )
+                else:
+                    return optimize.brentq(
+                        lambda x: self._cdf(-x, np.abs(a), df) - q,
+                        -upper,
+                        -lower,
+                        xtol=xtol,
+                    )
+            # def vectorized_brentq(func, qq, lower, upper, xtol=1e-8):
+            #     return np.array(
+            #         [
+            #             optimize.brentq(lambda x: func(x) - q, l, u, xtol=xtol)
+            #             for q, l, u in zip(qq, lower, upper)
+            #         ]
+            #     )
 
-            delta = a / np.sqrt(1 + a**2)
-            u = (q - 0.5) * np.pi
-            q = _lazywhere(a < 0, (q,), lambda q_: 1 - q_, f2=lambda q_: q_)
-            lower = t.ppf(q, df)  # quantiles for a=0
-            upper = np.sqrt(f.ppf(q, 1, df))
-            condlist = [df == 1, (df != 1) & (a < 0), (df != 1) & (a > 0)]
-            funclist = [
-                lambda q_, a_, df_: np.tan(u) + delta / np.cos(u),
-                lambda q_, a_, df_: vectorized_brentq(
-                    lambda x_: self._cdf(-x_, np.abs(a_), df_),
-                    q_,
-                    -upper,
-                    -lower,
-                    xtol=xtol,
-                ),
-                lambda q_, a_, df_: vectorized_brentq(
-                    lambda x_: self._cdf(x_, a_, df_), q_, lower, upper, xtol=xtol
-                ),
-            ]
+            # delta = a / np.sqrt(1 + a**2)
+            # u = (q - 0.5) * np.pi
+            # q = _lazywhere(a < 0, (q,), lambda q_: 1 - q_, f2=lambda q_: q_)
+            # lower = t.ppf(q, df)  # quantiles for a=0
+            # upper = np.sqrt(f.ppf(q, 1, df))
+            # condlist = [df == 1, (df != 1) & (a < 0), (df != 1) & (a > 0)]
+            # funclist = [
+            #     lambda q_, a_, df_: np.tan(u) + delta / np.cos(u),
+            #     lambda q_, a_, df_: vectorized_brentq(
+            #         lambda x_: self._cdf(-x_, np.abs(a_), df_),
+            #         q_,
+            #         -upper,
+            #         -lower,
+            #         xtol=xtol,
+            #     ),
+            #     lambda q_, a_, df_: vectorized_brentq(
+            #         lambda x_: self._cdf(x_, a_, df_), q_, lower, upper, xtol=xtol
+            #     ),
+            # ]
 
-            return _lazyselect(condlist, funclist, [q, a, df])
+            # return _lazyselect(condlist, funclist, [q, a, df])
 
-        # case7_ppf = np.vectorize(
-        #     case7_ppf, otypes=["float64"], excluded=["a", "df", "xtol"]
-        # )
+        case7_ppf = np.vectorize(
+            case7_ppf, otypes=["float64"], excluded=["a", "df", "xtol"]
+        )
         return _lazyselect(
             (
                 (df == np.inf) & (a == np.inf),
