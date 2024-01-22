@@ -1,9 +1,9 @@
 """
 Author         : Jie Li, Innovision IP Ltd and School of Mathematics, Statistics and Actuarial Science, University of Kent.
 Date           : 2023-12-24 20:58:11
-Last Revision  : 2024-01-20 13:51:44
+Last Revision  : 2024-01-22 13:30:03
 Last Author    : Jie Li
-File Path      : /KTP-Mini-Project/Python/skewt.py
+File Path      : /skewt_scipy/src/skewt_scipy/skewt.py
 Description    :
 
 
@@ -292,33 +292,36 @@ class skewt_gen(rv_continuous):
         # case6 = np.vectorize(case6, otypes=["float64"], excluded=["a", "df"])
 
         def case7_cdf(x, a, df):
-            # if df == 1:
-            #     # f(x)=1/(pi*(1+x^2))*(1+a*x/sqrt(1+x^2*(1+a^2)))
-            #     # the integrae is 2/pi*atan(x/(1+ax -sqrt(1+x^2*(1+a^2))))
-            #     delta = a / np.sqrt(1 + a**2)
-            #     return (
-            #         np.arctan(x) / np.pi
-            #         + np.arccos(delta / np.sqrt(1 + x**2)) / np.pi
-            #     )
-            # else:
-            #     return integrate.quad(lambda u: self._pdf(u, a, df), -np.inf, x)[0]
-            def f2(x_, a_, df_):
-                return np.array(
-                    [
-                        integrate.quad(lambda u: self._pdf(u, a_, df_), -np.inf, xi)[0]
-                        for xi in x_
-                    ]
+            if df == 1:
+                # f(x)=1/(pi*(1+x^2))*(1+a*x/sqrt(1+x^2*(1+a^2)))
+                # the integrae is 2/pi*atan(x/(1+ax -sqrt(1+x^2*(1+a^2))))
+                delta = a / np.sqrt(1 + a**2)
+                return (
+                    np.arctan(x) / np.pi
+                    + np.arccos(delta / np.sqrt(1 + x**2)) / np.pi
                 )
+            else:
+                return integrate.quad(lambda u: self._pdf(u, a, df), -np.inf, x)[0]
 
-            return _lazywhere(
-                df == 1,
-                (x, a, df),
-                lambda x_, a_, df_: np.arctan(x_) / np.pi
-                + np.arccos(a_ / np.sqrt(1 + a_**2) / np.sqrt(1 + x_**2)) / np.pi,
-                f2=f2,
-            )
+            # def f2(x_, a_, df_):
+            #     if np.isscalar(x_):
+            #         x_ = np.array([x_])
+            #     return np.array(
+            #         [
+            #             integrate.quad(lambda u: self._pdf(u, a_, df_), -np.inf, xi)[0]
+            #             for xi in x_
+            #         ]
+            #     )
 
-        # case7_cdf = np.vectorize(case7_cdf, otypes=["float64"], excluded=["a", "df"])
+            # return _lazywhere(
+            #     df == 1,
+            #     (x, a, df),
+            #     lambda x_, a_, df_: np.arctan(x_) / np.pi
+            #     + np.arccos(a_ / np.sqrt(1 + a_**2) / np.sqrt(1 + x_**2)) / np.pi,
+            #     f2=f2,
+            # )
+
+        case7_cdf = np.vectorize(case7_cdf, otypes=["float64"], excluded=["a", "df"])
 
         return _lazyselect(
             (
@@ -412,42 +415,42 @@ class skewt_gen(rv_continuous):
         # case6 = np.vectorize(case6, otypes=["float64"], excluded=["a", "df"])
 
         def case7_logcdf(x, a, df):
-            # if df == 1:
-            #     # f(x)=1/(pi*(1+x^2))*(1+a*x/sqrt(1+x^2*(1+a^2)))
-            #     # the integrae is 2/pi*atan(x/(1+ax -sqrt(1+x^2*(1+a^2))))
-            #     delta = a / np.sqrt(1 + a**2)
-            #     return np.log(
-            #         np.arctan(x) / np.pi
-            #         + np.arccos(delta / np.sqrt(1 + x**2)) / np.pi
-            #     )
-            # else:
-            #     return np.log(
-            #         integrate.quad(lambda u: self._pdf(u, a, df), -np.inf, x)[0]
-            #     )
-            def f2(x_, a_, df_):
+            if df == 1:
+                # f(x)=1/(pi*(1+x^2))*(1+a*x/sqrt(1+x^2*(1+a^2)))
+                # the integrae is 2/pi*atan(x/(1+ax -sqrt(1+x^2*(1+a^2))))
+                delta = a / np.sqrt(1 + a**2)
                 return np.log(
-                    np.array(
-                        [
-                            integrate.quad(
-                                lambda u: self._pdf(u, a_, df_), -np.inf, xi
-                            )[0]
-                            for xi in x_
-                        ]
-                    )
+                    np.arctan(x) / np.pi
+                    + np.arccos(delta / np.sqrt(1 + x**2)) / np.pi
                 )
+            else:
+                return np.log(
+                    integrate.quad(lambda u: self._pdf(u, a, df), -np.inf, x)[0]
+                )
+            # def f2(x_, a_, df_):
+            #     return np.log(
+            #         np.array(
+            #             [
+            #                 integrate.quad(
+            #                     lambda u: self._pdf(u, a_, df_), -np.inf, xi
+            #                 )[0]
+            #                 for xi in x_
+            #             ]
+            #         )
+            #     )
 
-            return _lazywhere(
-                df == 1,
-                (x, a, df),
-                lambda x_, a_, df_: np.log(
-                    np.arctan(x_) / np.pi
-                    + np.arccos(a_ / np.sqrt(1 + a_**2) / np.sqrt(1 + x_**2))
-                    / np.pi
-                ),
-                f2=f2,
-            )
+            # return _lazywhere(
+            #     df == 1,
+            #     (x, a, df),
+            #     lambda x_, a_, df_: np.log(
+            #         np.arctan(x_) / np.pi
+            #         + np.arccos(a_ / np.sqrt(1 + a_**2) / np.sqrt(1 + x_**2))
+            #         / np.pi
+            #     ),
+            #     f2=f2,
+            # )
 
-        # case7_logcdf = np.vectorize(case7_logcdf, otypes=["float64"])
+        case7_logcdf = np.vectorize(case7_logcdf, otypes=["float64"])
 
         return _lazyselect(
             (
@@ -541,7 +544,7 @@ class skewt_gen(rv_continuous):
             def vectorized_brentq(func, qq, lower, upper, xtol=1e-8):
                 return np.array(
                     [
-                        optimize.brentq(func - q, l, u, xtol=xtol)
+                        optimize.brentq(lambda x: func(x) - q, l, u, xtol=xtol)
                         for q, l, u in zip(qq, lower, upper)
                     ]
                 )
