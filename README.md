@@ -7,24 +7,30 @@
 We employ the definition of the skew-t distribution from Azzalini (2014, Section 4.3.1). Firstly, we need two density functions: $t$ distribution and skew-normal distribution respectively. The $t$ distribution is defined as:
 
 $$
-    f_{t}(x|\nu) = \frac{\Gamma(\frac{\nu+1}{2})}{\sqrt{\nu\pi}\Gamma(\frac{\nu}{2})}\left(1+\frac{x^{2}}{\nu}\right)^{-\frac{\nu+1}{2}}, \quad x\in \mathbb{R},\quad \nu>0,
+f_{t}(x|\nu) = \frac{\Gamma(\frac{\nu+1}{2})}{\sqrt{\nu\pi}\Gamma(\frac{\nu}{2})}\left(1+\frac{x^{2}}{\nu}\right)^{-\frac{\nu+1}{2}}, \quad x\in \mathbb{R},\quad \nu>0,
 $$
 
 where $\nu$ denotes the degree of freedom. The skew-normal distribution is defined as:
+
 $$
-    f_{sn}(x|\xi,\omega,\alpha) = \frac{2}{\omega}\phi\left(\frac{x-\xi}{\omega}\right)\Phi\left(\alpha \left( \frac{x-\xi}{\omega} \right)\right), \quad x\in \mathbb{R},\quad \omega>0,\quad \alpha\in \mathbb{R},
+f_{sn}(x|\xi,\omega,\alpha) = \frac{2}{\omega}\phi\left(\frac{x-\xi}{\omega}\right)\Phi\left(\alpha \left( \frac{x-\xi}{\omega} \right)\right), \quad x\in \mathbb{R},\quad \omega>0,\quad \alpha\in \mathbb{R},
 $$
+
 where $\xi, \omega$ are the location and scale parameters respectively. $\alpha$ is the skewness parameter. $\phi(\cdot)$ and $\Phi(\cdot)$ are the standard normal density function and cumulative distribution function respectively.
 
 The skew-t variable can be defined as:
+
 $$
-    Z= \frac{Z_{0}}{\sqrt{V}},
+Z= \frac{Z_{0}}{\sqrt{V}},
 $$
+
 where $Z_{0}\sim f_{sn}(x|0,1,\alpha)$
 and $V\sim \chi^{2}_{\nu}/\nu$ are independent. Then, the density function of $Z$ is
+
 $$
-    f_{st}(\alpha,\nu)= 2f_{t}(x|\nu)F_{t}\left(\alpha x\sqrt{\frac{\nu+1}{\nu+x^{2}}}\Big|\nu+1\right),
+f_{st}(\alpha,\nu)= 2f_{t}(x|\nu)F_{t}\left(\alpha x\sqrt{\frac{\nu+1}{\nu+x^{2}}}\Big|\nu+1\right),
 $$
+
 where $F_{t}(\cdot|\nu+1)$ represent the $t$ cumulative density function with degree of freedom $\nu+1$. As $\alpha\in \mathbb{R}$ and $\nu>0$, then skew-t distribution can degenerate several special distributions.
 
 ## Installation
