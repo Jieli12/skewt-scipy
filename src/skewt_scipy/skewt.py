@@ -1,7 +1,7 @@
 """
 Author         : Jie Li, Innovision IP Ltd and School of Mathematics, Statistics and Actuarial Science, University of Kent.
 Date           : 2023-12-24 20:58:11
-Last Revision  : 2024-01-22 13:36:37
+Last Revision  : 2024-02-28 13:12:54
 Last Author    : Jie Li
 File Path      : /skewt_scipy/src/skewt_scipy/skewt.py
 Description    :
@@ -16,6 +16,7 @@ Description    :
 Copyright (c) 2023, Jie Li, jl725@kent.ac.uk
 All Rights Reserved.
 """
+
 # %%
 import numpy as np
 from scipy import integrate, optimize
@@ -297,8 +298,7 @@ class skewt_gen(rv_continuous):
                 # the integrae is 2/pi*atan(x/(1+ax -sqrt(1+x^2*(1+a^2))))
                 delta = a / np.sqrt(1 + a**2)
                 return (
-                    np.arctan(x) / np.pi
-                    + np.arccos(delta / np.sqrt(1 + x**2)) / np.pi
+                    np.arctan(x) / np.pi + np.arccos(delta / np.sqrt(1 + x**2)) / np.pi
                 )
             else:
                 return integrate.quad(lambda u: self._pdf(u, a, df), -np.inf, x)[0]
@@ -420,8 +420,7 @@ class skewt_gen(rv_continuous):
                 # the integrae is 2/pi*atan(x/(1+ax -sqrt(1+x^2*(1+a^2))))
                 delta = a / np.sqrt(1 + a**2)
                 return np.log(
-                    np.arctan(x) / np.pi
-                    + np.arccos(delta / np.sqrt(1 + x**2)) / np.pi
+                    np.arctan(x) / np.pi + np.arccos(delta / np.sqrt(1 + x**2)) / np.pi
                 )
             else:
                 return np.log(
@@ -532,44 +531,18 @@ class skewt_gen(rv_continuous):
                 upper = np.sqrt(f.ppf(q, 1, df))
                 if a > 0:
                     return optimize.brentq(
-                        lambda x: self._cdf(x, a, df) - q, lower, upper, xtol=xtol
+                        lambda x: self._cdf(x, a, df) - q,
+                        lower * 0.8,
+                        upper * 1.2,
+                        xtol=xtol,
                     )
                 else:
                     return optimize.brentq(
                         lambda x: self._cdf(-x, np.abs(a), df) - q,
-                        -upper,
-                        -lower,
+                        -upper * 1.2,
+                        -lower * 0.8,
                         xtol=xtol,
                     )
-            # def vectorized_brentq(func, qq, lower, upper, xtol=1e-8):
-            #     return np.array(
-            #         [
-            #             optimize.brentq(lambda x: func(x) - q, l, u, xtol=xtol)
-            #             for q, l, u in zip(qq, lower, upper)
-            #         ]
-            #     )
-
-            # delta = a / np.sqrt(1 + a**2)
-            # u = (q - 0.5) * np.pi
-            # q = _lazywhere(a < 0, (q,), lambda q_: 1 - q_, f2=lambda q_: q_)
-            # lower = t.ppf(q, df)  # quantiles for a=0
-            # upper = np.sqrt(f.ppf(q, 1, df))
-            # condlist = [df == 1, (df != 1) & (a < 0), (df != 1) & (a > 0)]
-            # funclist = [
-            #     lambda q_, a_, df_: np.tan(u) + delta / np.cos(u),
-            #     lambda q_, a_, df_: vectorized_brentq(
-            #         lambda x_: self._cdf(-x_, np.abs(a_), df_),
-            #         q_,
-            #         -upper,
-            #         -lower,
-            #         xtol=xtol,
-            #     ),
-            #     lambda q_, a_, df_: vectorized_brentq(
-            #         lambda x_: self._cdf(x_, a_, df_), q_, lower, upper, xtol=xtol
-            #     ),
-            # ]
-
-            # return _lazyselect(condlist, funclist, [q, a, df])
 
         case7_ppf = np.vectorize(
             case7_ppf, otypes=["float64"], excluded=["a", "df", "xtol"]
