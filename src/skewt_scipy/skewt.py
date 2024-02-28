@@ -1,7 +1,7 @@
 """
 Author         : Jie Li, Innovision IP Ltd and School of Mathematics, Statistics and Actuarial Science, University of Kent.
 Date           : 2023-12-24 20:58:11
-Last Revision  : 2024-02-28 13:12:54
+Last Revision  : 2024-02-28 20:10:57
 Last Author    : Jie Li
 File Path      : /skewt_scipy/src/skewt_scipy/skewt.py
 Description    :
@@ -532,15 +532,15 @@ class skewt_gen(rv_continuous):
                 if a > 0:
                     return optimize.brentq(
                         lambda x: self._cdf(x, a, df) - q,
-                        lower * 0.8,
-                        upper * 1.2,
+                        lower * 0.5,
+                        upper * 1.5,
                         xtol=xtol,
                     )
                 else:
                     return optimize.brentq(
                         lambda x: self._cdf(-x, np.abs(a), df) - q,
-                        -upper * 1.2,
-                        -lower * 0.8,
+                        -upper * 1.5,
+                        -lower * 0.5,
                         xtol=xtol,
                     )
 
