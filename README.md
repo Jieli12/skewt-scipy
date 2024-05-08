@@ -1,3 +1,5 @@
+[![Downloads](https://static.pepy.tech/badge/skewt-scipy)](https://pepy.tech/project/skewt-scipy)
+
 # Skew student $t$ distribution
 
 `Skewt-Scipy` is a Python package for skew student $t$ distribution.
